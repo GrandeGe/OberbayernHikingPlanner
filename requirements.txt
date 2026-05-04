@@ -1,0 +1,8 @@
+# Phase 1 - Weather
+requests>=2.31.0
+
+# Phase 2 - Routes (uncomment when needed)
+# geopy>=2.4.0
+
+# Phase 3 - Transit (uncomment when needed)
+# pandas>=2.1.0

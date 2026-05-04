@@ -1,0 +1,24 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# Data files (large, don't upload)
+data/*.db
+data/*.zip
+data/*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
