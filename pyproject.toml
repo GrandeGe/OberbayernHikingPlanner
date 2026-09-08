@@ -1,0 +1,43 @@
+[project]
+name = "oberbayern-hiking-planner"
+version = "0.2.0"
+description = "Recommends hikes near Munich from weather, OSM trail data and MVV transit accessibility."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "GrandeGe" }]
+dependencies = [
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.5",
+]
+web = [
+    "flask>=3.0",
+]
+
+[project.urls]
+Repository = "https://github.com/GrandeGe/OberbayernHikingPlanner"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "tests"]
+addopts = "-m 'not live' --strict-markers"
+markers = [
+    "live: hits a real external API; deselected by default and never run in CI",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]

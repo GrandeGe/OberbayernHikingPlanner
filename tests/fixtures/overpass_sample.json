@@ -1,0 +1,344 @@
+{
+ "version": 0.6,
+ "generator": "Overpass API 0.7.62",
+ "elements": [
+  {
+   "type": "relation",
+   "id": 1001,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.72,
+    "maxlon": 11.82
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 1,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      }
+     ]
+    },
+    {
+     "type": "way",
+     "ref": 2,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      },
+      {
+       "lat": 47.72,
+       "lon": 11.82
+      }
+     ]
+    },
+    {
+     "type": "node",
+     "ref": 90,
+     "role": "guidepost",
+     "lat": 47.705,
+     "lon": 11.805
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Bodenschneid-Runde",
+    "network": "lwn",
+    "ref": "BR1",
+    "ascent": "620",
+    "descent": "620 m",
+    "distance": "12,5 km",
+    "roundtrip": "no"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1002,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.72,
+    "maxlon": 11.82
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 3,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      }
+     ]
+    },
+    {
+     "type": "way",
+     "ref": 4,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.72,
+       "lon": 11.82
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Reversal Test",
+    "network": "rwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1003,
+   "bounds": {
+    "minlat": 47.6,
+    "minlon": 11.6,
+    "maxlat": 48.0,
+    "maxlon": 12.0
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 5,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 48.0,
+       "lon": 12.0
+      },
+      {
+       "lat": 48.001,
+       "lon": 12.001
+      }
+     ]
+    },
+    {
+     "type": "way",
+     "ref": 6,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.6,
+       "lon": 11.6
+      },
+      {
+       "lat": 47.62,
+       "lon": 11.62
+      },
+      {
+       "lat": 47.64,
+       "lon": 11.64
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Gap Test",
+    "network": "lwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1004,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.71,
+    "maxlon": 11.81
+   },
+   "members": [
+    {
+     "type": "node",
+     "ref": 91,
+     "role": "",
+     "lat": 47.7,
+     "lon": 11.8
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Nodes Only",
+    "network": "lwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1005,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.72,
+    "maxlon": 11.82
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 7,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      },
+      {
+       "lat": 47.72,
+       "lon": 11.82
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "network": "lwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1006,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.72,
+    "maxlon": 11.82
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 8,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      },
+      {
+       "lat": 47.72,
+       "lon": 11.82
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "ref": "M1",
+    "network": "nwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1007,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.71,
+    "maxlon": 11.81
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 9,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Loop Test",
+    "network": "lwn"
+   }
+  },
+  {
+   "type": "relation",
+   "id": 1008,
+   "bounds": {
+    "minlat": 47.7,
+    "minlon": 11.8,
+    "maxlat": 47.72,
+    "maxlon": 11.82
+   },
+   "members": [
+    {
+     "type": "way",
+     "ref": 10,
+     "role": "",
+     "geometry": [
+      {
+       "lat": 47.7,
+       "lon": 11.8
+      },
+      {
+       "lat": 47.71,
+       "lon": 11.81
+      },
+      {
+       "lat": 47.72,
+       "lon": 11.82
+      }
+     ]
+    }
+   ],
+   "tags": {
+    "type": "route",
+    "route": "hiking",
+    "name": "Bad Ascent",
+    "network": "lwn",
+    "ascent": "ca. 600",
+    "descent": ""
+   }
+  }
+ ]
+}

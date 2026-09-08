@@ -22,3 +22,5 @@ Thumbs.db
 
 # Environment variables
 .env
+# Overpass tile cache
+data/cache/
