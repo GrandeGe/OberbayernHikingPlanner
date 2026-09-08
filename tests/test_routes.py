@@ -11,7 +11,6 @@ import math
 import re
 
 import pytest
-
 from conftest import (
     LOOP_POLYLINE_KM,
     MAIN_POLYLINE_KM,

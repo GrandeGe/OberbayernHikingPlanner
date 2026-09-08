@@ -6,9 +6,9 @@ Bright Sky 是 DWD（德国气象局）数据的 JSON 封装，免费无需 API 
 文档：https://brightsky.dev/docs/
 """
 
-import requests
 from datetime import datetime, timedelta, timezone
 
+import requests
 
 # ─────────────────────────────────────────
 # 常量
@@ -71,10 +71,10 @@ def fetch_weather(lat: float, lon: float, days: int = 3) -> list[dict]:
     try:
         resp = requests.get(url, params=params, timeout=10)
         resp.raise_for_status()   # HTTP 4xx/5xx → 抛出异常
-    except requests.ConnectionError:
-        raise requests.RequestException("无法连接到 Bright Sky API，请检查网络。")
-    except requests.Timeout:
-        raise requests.RequestException("请求超时（10秒），请稍后重试。")
+    except requests.ConnectionError as exc:
+        raise requests.RequestException("无法连接到 Bright Sky API，请检查网络。") from exc
+    except requests.Timeout as exc:
+        raise requests.RequestException("请求超时（10秒），请稍后重试。") from exc
 
     data = resp.json()
 

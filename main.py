@@ -6,7 +6,7 @@ OberbayernHikingPlanner — main entry point
 import argparse
 import sys
 
-import requests as req_lib   # 用别名避免和模块名冲突
+import requests as req_lib  # 用别名避免和模块名冲突
 
 
 def cmd_weather(args):
@@ -20,7 +20,7 @@ def cmd_weather(args):
             from src.geocoder import geocode
             lat, lon, display_name = geocode(args.location)
         except ImportError:
-            print(f"⚠️  geocoder 模块尚未实现，--location 暂不可用。")
+            print("⚠️  geocoder 模块尚未实现，--location 暂不可用。")
             print("    请使用 --lat / --lon 直接指定坐标。")
             sys.exit(1)
         except Exception as e:

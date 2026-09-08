@@ -5,7 +5,6 @@ from __future__ import annotations
 import sqlite3
 
 import pytest
-
 from conftest import require
 
 db = require("src.db", "connect", "init_db", "check_schema", "SCHEMA_VERSION")
@@ -29,7 +28,7 @@ def table_names(conn) -> set[str]:
 
 
 def test_init_db_creates_all_tables(db_conn):
-    assert EXPECTED_TABLES <= table_names(db_conn)
+    assert table_names(db_conn) >= EXPECTED_TABLES
 
 
 def test_routes_columns_match_contract(db_conn):
@@ -46,7 +45,7 @@ def test_schema_version_recorded(db_conn):
 def test_init_db_is_idempotent(db_conn):
     db.init_db(db_conn)
     db.init_db(db_conn)
-    assert EXPECTED_TABLES <= table_names(db_conn)
+    assert table_names(db_conn) >= EXPECTED_TABLES
 
 
 def test_foreign_keys_are_enabled(db_conn):

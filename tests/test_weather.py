@@ -12,7 +12,6 @@ import json
 
 import pytest
 import requests
-
 from conftest import FIXTURE_DIR, require
 
 weather = require("src.weather", "group_by_day", "summarize_day", "format_forecast")
