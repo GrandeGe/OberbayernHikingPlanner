@@ -41,6 +41,32 @@ out geom;
 - `out geom;` is required — `out tags;` gives no coordinates and `out body;`
   gives member IDs you would then have to resolve in a second request.
 
+### Identifying the client (mandatory)
+
+`overpass-api.de` answers **HTTP 406 Not Acceptable** to requests that arrive
+without a `User-Agent`. The operators added this to enforce their usage policy
+on a donated public endpoint, so it is a hard requirement, not a courtesy.
+The default `python-requests/2.x` User-Agent is rejected.
+
+Define a module constant and send it on every request:
+
+```python
+OVERPASS_HEADERS = {
+    "User-Agent": (
+        "OberbayernHikingPlanner/1.0 "
+        "(+https://github.com/GrandeGe/OberbayernHikingPlanner)"
+    ),
+    "Referer": "https://github.com/GrandeGe/OberbayernHikingPlanner",
+}
+```
+
+`Referer` is what the OSM community recommends alongside the User-Agent; keep
+it. Send the query in the POST **body** (`data={"data": query}`), never in the
+URL — a long query in the query string is the other thing the front end rejects.
+
+A 406 is not retryable: it means the request itself is wrong, so treat it like
+400 and raise rather than sleeping and trying again.
+
 ### Fetching at scale
 
 A single `out geom` query over all of Upper Bavaria will return on the order of

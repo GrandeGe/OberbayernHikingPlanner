@@ -9,6 +9,7 @@ everyone who clones it.
 from __future__ import annotations
 
 import pytest
+
 from conftest import require
 
 geocoder = require("src.geocoder", "geocode")

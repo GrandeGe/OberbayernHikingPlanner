@@ -11,6 +11,7 @@ import math
 import re
 
 import pytest
+
 from conftest import (
     LOOP_POLYLINE_KM,
     MAIN_POLYLINE_KM,
@@ -92,6 +93,38 @@ def test_query_honours_network_filter():
     q = routes.build_overpass_query(models.OBERBAYERN_BBOX, networks=("rwn", "lwn"))
     assert "rwn" in q and "lwn" in q
     assert "iwn" not in q and "nwn" not in q
+
+
+def test_fetch_raw_identifies_itself_to_overpass(monkeypatch):
+    """overpass-api.de answers HTTP 406 Not Acceptable to requests that arrive
+    with no User-Agent. That is how the operators enforce their usage policy on
+    a donated public endpoint, so identifying the client is a requirement, not a
+    nicety. The query also belongs in the POST body, not the URL."""
+    captured = {}
+
+    class FakeResponse:
+        status_code = 200
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"elements": []}
+
+    def fake_post(url, data=None, headers=None, timeout=None, **kwargs):
+        captured.update(url=url, data=data, headers=headers, timeout=timeout)
+        return FakeResponse()
+
+    monkeypatch.setattr(routes.requests, "post", fake_post)
+    routes.fetch_raw(models.BBox(47.70, 11.80, 47.75, 11.85))
+
+    assert captured["headers"], "Overpass rejects requests that send no User-Agent"
+    user_agent = (captured["headers"] or {}).get("User-Agent", "")
+    assert "OberbayernHikingPlanner" in user_agent, (
+        f"User-Agent must name this project so operators can identify it; got {user_agent!r}"
+    )
+    assert captured["timeout"] is not None
+    assert "data" in (captured["data"] or {}), "the query goes in the POST body"
 
 
 # ──────────────────────────── tiling ───────────────────────────────────

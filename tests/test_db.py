@@ -5,6 +5,7 @@ from __future__ import annotations
 import sqlite3
 
 import pytest
+
 from conftest import require
 
 db = require("src.db", "connect", "init_db", "check_schema", "SCHEMA_VERSION")

@@ -6,9 +6,13 @@ Bright Sky 是 DWD（德国气象局）数据的 JSON 封装，免费无需 API 
 文档：https://brightsky.dev/docs/
 """
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta, timezone
 
 import requests
+
+from src.errors import DataSourceError
 
 # ─────────────────────────────────────────
 # 常量
@@ -53,8 +57,7 @@ def fetch_weather(lat: float, lon: float, days: int = 3) -> list[dict]:
         list of dict，每个 dict 是一个小时的天气记录（原始 API 字段）。
 
     异常：
-        requests.RequestException — 网络错误
-        ValueError                — API 返回错误
+        DataSourceError — 网络错误或 API 返回意外格式（保留原始异常）
     """
     today = datetime.now(timezone.utc).date()
     last_day = today + timedelta(days=days - 1)
@@ -70,18 +73,17 @@ def fetch_weather(lat: float, lon: float, days: int = 3) -> list[dict]:
 
     try:
         resp = requests.get(url, params=params, timeout=10)
-        resp.raise_for_status()   # HTTP 4xx/5xx → 抛出异常
-    except requests.ConnectionError as exc:
-        raise requests.RequestException("无法连接到 Bright Sky API，请检查网络。") from exc
-    except requests.Timeout as exc:
-        raise requests.RequestException("请求超时（10秒），请稍后重试。") from exc
-
-    data = resp.json()
-
-    if "weather" not in data:
-        raise ValueError(f"API 返回了意外的格式：{data}")
-
-    return data["weather"]
+        resp.raise_for_status()
+        data = resp.json()
+        if not isinstance(data, dict) or not isinstance(data.get("weather"), list):
+            raise ValueError("Expected an object containing a weather list.")
+        for record in data["weather"]:
+            if not isinstance(record, dict) or not isinstance(record.get("timestamp"), str):
+                raise ValueError("Each weather record must contain a timestamp string.")
+            datetime.fromisoformat(record["timestamp"])
+        return data["weather"]
+    except (requests.RequestException, ValueError) as exc:
+        raise DataSourceError(f"Bright Sky request failed or returned invalid data: {exc}") from exc
 
 
 def group_by_day(records: list[dict]) -> dict[str, list[dict]]:
@@ -115,12 +117,12 @@ def summarize_day(records: list[dict]) -> dict:
 
     # 最常出现的 condition 为 dominant
     conditions = [r["condition"] for r in records if r.get("condition")]
-    dominant = max(set(conditions), key=conditions.count) if conditions else "unknown"
+    dominant = max(conditions, key=conditions.count) if conditions else None
 
     return {
         "temp_min": min(temps) if temps else None,
         "temp_max": max(temps) if temps else None,
-        "total_rain": sum(rains) if rains else 0.0,
+        "total_rain": sum(rains) if rains else None,
         "max_wind": max(winds) if winds else None,
         "dominant_condition": dominant,
         "avg_cloud_cover": sum(clouds) / len(clouds) if clouds else None,
@@ -147,8 +149,8 @@ def _format_hour_row(rec: dict) -> str:
     wind_dir = _wind_dir_label(rec.get("wind_direction"))
     wind_str = f"wind {wind_speed:.0f} km/h {wind_dir}" if wind_speed is not None else "wind —"
 
-    rain = rec.get("precipitation", 0.0) or 0.0
-    rain_str = f"rain {rain:.1f}mm"
+    rain = rec.get("precipitation")
+    rain_str = f"rain {_format_number(rain, 1)}mm"
 
     return f"  {hour_str}  {emoji}  {temp_str}  {wind_str}  {rain_str}"
 
@@ -161,47 +163,44 @@ def _weekday_de(date_str: str) -> str:
     return f"{weekday}, {dt.strftime('%d.%m.%Y')}"
 
 
-def print_forecast(
+def _format_number(value: float | None, digits: int = 0) -> str:
+    """Format a numeric value, using an em dash for missing data."""
+    return "—" if value is None else f"{value:.{digits}f}"
+
+
+def format_forecast(
     lat: float,
     lon: float,
     location_name: str | None = None,
     records: list[dict] | None = None,
     daytime_only: bool = True,
-) -> None:
-    """
-    把天气预报漂亮地打印到终端。
+) -> str:
+    """Return forecast text; fetch records only when none were supplied.
 
-    参数：
-        lat, lon        — 坐标（用于显示）
-        location_name   — 可选的地名字符串
-        records         — fetch_weather() 的返回值（传入以避免重复请求）
-        daytime_only    — 只显示 06:00–20:00 的记录（默认 True，减少噪音）
+    Missing numeric values appear as —. The daytime filter keeps hourly rows
+    from 06:00 through 20:00; daily summaries include every supplied hour.
     """
     if records is None:
         records = fetch_weather(lat, lon)
 
     loc_label = location_name if location_name else f"{lat}°N, {lon}°E"
-    print(f"\n📍 {loc_label} ({lat:.4f}°N, {lon:.4f}°E)")
-    print("━" * 50)
-
+    lines = [f"\n📍 {loc_label} ({lat:.4f}°N, {lon:.4f}°E)", "━" * 50]
     grouped = group_by_day(records)
 
     for day_key, day_records in sorted(grouped.items()):
         summary = summarize_day(day_records)
-
-        print(f"\n📅 {_weekday_de(day_key)}")
-        print(
-            f"   摘要: {summary['temp_min']:.0f}°C — {summary['temp_max']:.0f}°C  "
-            f"累计雨量 {summary['total_rain']:.1f}mm  "
-            f"最大风速 {summary['max_wind']:.0f}km/h"
-        )
-        print()
-
+        lines.extend([
+            f"\n📅 {_weekday_de(day_key)}",
+            f"   摘要: {_format_number(summary['temp_min'])}°C — "
+            f"{_format_number(summary['temp_max'])}°C  "
+            f"累计雨量 {_format_number(summary['total_rain'], 1)}mm  "
+            f"最大风速 {_format_number(summary['max_wind'])}km/h",
+            "",
+        ])
         for rec in day_records:
-            if daytime_only:
-                hour = datetime.fromisoformat(rec["timestamp"]).hour
-                if not (6 <= hour <= 20):
-                    continue
-            print(_format_hour_row(rec))
+            hour = datetime.fromisoformat(rec["timestamp"]).hour
+            if daytime_only and not (6 <= hour <= 20):
+                continue
+            lines.append(_format_hour_row(rec))
 
-    print()
+    return "\n".join(lines) + "\n\n"
