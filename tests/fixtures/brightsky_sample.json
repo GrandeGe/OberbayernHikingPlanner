@@ -1,0 +1,16 @@
+{
+ "weather": [
+  {"timestamp": "2026-09-12T06:00:00+00:00", "source_id": 1, "temperature": 10.0,
+   "precipitation": 0.0, "wind_speed": 5.0, "wind_direction": 0, "cloud_cover": 10,
+   "condition": "dry", "icon": "clear-day"},
+  {"timestamp": "2026-09-12T12:00:00+00:00", "source_id": 1, "temperature": 15.0,
+   "precipitation": 0.5, "wind_speed": 12.0, "wind_direction": 180, "cloud_cover": 50,
+   "condition": "dry", "icon": "partly-cloudy-day"},
+  {"timestamp": "2026-09-12T22:00:00+00:00", "source_id": 1, "temperature": 20.0,
+   "precipitation": null, "wind_speed": null, "wind_direction": null, "cloud_cover": 90,
+   "condition": "rain", "icon": "rain"},
+  {"timestamp": "2026-09-13T09:00:00+00:00", "source_id": 1, "temperature": null,
+   "precipitation": null, "wind_speed": null, "wind_direction": null, "cloud_cover": null,
+   "condition": null, "icon": null}
+ ]
+}

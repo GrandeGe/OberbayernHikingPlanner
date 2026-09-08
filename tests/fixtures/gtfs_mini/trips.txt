@@ -1,0 +1,6 @@
+route_id,service_id,trip_id
+R1,WEEKDAY,T_WD_1
+R1,WEEKDAY,T_WD_2
+R2,SATURDAY,T_SA_1
+R3,SPECIAL,T_SP_1
+R4,EXPIRED,T_EX_1
